@@ -4,18 +4,12 @@ const { User } = require('../../models');
 // URL: /api/user
 router.post('/', async (req, res) => {
   try {
-    const newUser = await User.create({
-      // TODO: SET USERNAME TO USERNAME SENT IN REQUEST
-
-      // TODO: SET PASSWORD TO PASSWORD SENT IN REQUEST
-    });
-
-    req.session.save(() => {
-      // TODO: SET USERID userId IN REQUEST SESSION TO ID RETURNED FROM DATABASE
-
-      // TODO: SET USERNAME username IN REQUEST SESSION TO USERNAME RETURNED FROM DATABASE
-
-      // TODO: SET LOGGEDIN loggedIn TO TRUE IN REQUEST SESSION
+    const newUser = await User.create(req.body);
+    
+      req.session.save(() => {
+        req.session.user_id = newUser.id;
+        req.session.logged_in = true;
+        req.session.username = newUser.username;
 
       res.json(newUser);
     });
@@ -47,12 +41,11 @@ router.post('/login', async (req, res) => {
     }
 
     req.session.save(() => {
-      // TODO: SET USERID userId IN REQUEST SESSION TO ID RETURNED FROM DATABASE
-
-      // TODO: SET USERNAME username IN REQUEST SESSION TO USERNAME RETURNED FROM DATABASE
-
-      // TODO: SET LOGGEDIN loggedIn TO TRUE IN REQUEST SESSION
-
+      
+        req.session.user_id = user.id;
+        req.session.logged_in = true;
+        req.session.username = user.username;
+  
       res.json({ user, message: 'You are now logged in!' });
     });
   } catch (err) {
@@ -61,7 +54,7 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-  if (req.session.loggedIn) {
+  if (req.session.logged_in) {
     req.session.destroy(() => {
       res.status(204).end();
     });
