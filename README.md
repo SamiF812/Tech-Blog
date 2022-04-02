@@ -4,7 +4,7 @@
 
 Github Repo: https://github.com/SamiF812/Tech-Blog
 
-Deployed App:
+Deployed App: https://sami-tech-blog.herokuapp.com/
 
 
 ![shot1](./public/assets/images/shot1TB.png)
